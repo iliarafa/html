@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, sanitize } from "./parser";
 
-describe("parser", () => {
+describe("parser / sanitizer", () => {
   it("renders markdown headings, lists, bold, links", () => {
     const html = render(
       "# Title\n\nSome **bold** and a [link](https://example.com).\n\n- a\n- b",
@@ -13,45 +13,52 @@ describe("parser", () => {
     expect(html).toContain("<li>a</li>");
   });
 
-  it("highlights fenced code blocks at generation time", () => {
+  it("leaves code blocks un-highlighted (highlighting happens at serialize time)", () => {
     const html = render("```js\nconst x = 1;\n```", "markdown");
-    expect(html).toContain("hljs");
-    // highlight.js wraps tokens in spans with class names
-    expect(html).toMatch(/<span class="hljs-/);
+    expect(html).toContain("<pre><code");
+    expect(html).toContain("language-js");
+    expect(html).not.toMatch(/<span class="hljs-/);
   });
 
-  it("preserves plain text with paragraph and line breaks", () => {
+  it("preserves plain text with paragraph and line breaks, escaping angle brackets", () => {
     const html = render("line one\nline two\n\nsecond para", "text");
     expect(html).toContain("line one<br>line two");
     expect(html).toContain("<p>second para</p>");
-    // angle brackets in plain text are escaped, not interpreted
     expect(render("a < b > c", "text")).toContain("a &lt; b &gt; c");
   });
 
-  it("strips scripts and event handlers from any input", () => {
-    const md = render("<script>alert(1)</script>\n\nhi", "markdown");
-    expect(md).not.toContain("<script");
+  it("strips scripts and event handlers", () => {
+    expect(render("<script>alert(1)</script>\n\nhi", "markdown")).not.toContain("<script");
     const html = sanitize('<p onerror="x()" onclick="y()">text</p>');
     expect(html).not.toContain("onerror");
     expect(html).not.toContain("onclick");
   });
 
-  it("strips images and media (self-contained output)", () => {
+  it("keeps data: images but drops remote-URL images (offline guarantee)", () => {
     const html = sanitize(
-      '<p>hi</p><img src="https://x/y.png"><iframe src="https://x"></iframe>',
+      '<img src="data:image/png;base64,AAAA" alt="ok"><img src="https://x/y.png" alt="no">',
     );
-    expect(html).not.toContain("<img");
+    expect(html).toContain('src="data:image/png;base64,AAAA"');
+    expect(html).not.toContain("https://x/y.png");
+  });
+
+  it("forbids svg, iframe, and other unsafe/non-offline tags", () => {
+    const html = sanitize('<p>hi</p><svg onload="x"></svg><iframe src="https://x"></iframe>');
+    expect(html).not.toContain("<svg");
     expect(html).not.toContain("<iframe");
     expect(html).toContain("<p>hi</p>");
   });
 
-  it("passes scraped HTML through sanitization", () => {
-    const html = render(
-      '<h2>Article</h2><p>Body text</p><script>bad()</script>',
-      "html",
-    );
-    expect(html).toContain("<h2>Article</h2>");
-    expect(html).toContain("<p>Body text</p>");
-    expect(html).not.toContain("<script");
+  it("preserves block/interactive structure (details, aside, figure, tabs)", () => {
+    const input =
+      '<details class="collapsible"><summary>More</summary><div class="collapsible-body"><p>x</p></div></details>' +
+      '<aside class="callout" data-variant="info"><p>note</p></aside>' +
+      '<div class="tabs" data-tabs><div class="tablist" role="tablist"><button class="tab" role="tab" aria-selected="true">A</button></div></div>';
+    const html = sanitize(input);
+    expect(html).toContain("<details");
+    expect(html).toContain("<summary>More</summary>");
+    expect(html).toContain('data-variant="info"');
+    expect(html).toContain('role="tablist"');
+    expect(html).toContain('aria-selected="true"');
   });
 });

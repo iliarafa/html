@@ -1,17 +1,24 @@
 "use client";
 
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  if (n < 1_000_000) return `${(n / 1024).toFixed(0)} KB`;
+  return `${(n / 1_000_000).toFixed(1)} MB`;
+}
+
 export default function LivePreview({
   doc,
   hasContent,
   title,
+  fileBytes,
 }: {
   doc: string;
   hasContent: boolean;
   title: string;
+  fileBytes: number;
 }) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
-      {/* fake browser chrome */}
       <div className="flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2.5">
         <span className="h-3 w-3 rounded-full bg-zinc-300" />
         <span className="h-3 w-3 rounded-full bg-zinc-300" />
@@ -19,7 +26,9 @@ export default function LivePreview({
         <span className="ml-2 truncate rounded-md bg-white px-3 py-1 text-xs text-zinc-400 ring-1 ring-zinc-200">
           {title || "untitled"}.html
         </span>
-        <span className="ml-auto text-xs font-medium text-zinc-400">Live preview</span>
+        <span className="ml-auto text-xs font-medium text-zinc-400">
+          {hasContent ? formatBytes(fileBytes) : "Live preview"}
+        </span>
       </div>
       {hasContent ? (
         <iframe

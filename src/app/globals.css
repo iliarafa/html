@@ -18,3 +18,30 @@ body {
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
 }
+
+/* TipTap editing surface (the app's editor, not the output file). */
+.tiptap { outline: none; min-height: 360px; color: #18181b; line-height: 1.7; }
+.tiptap > * + * { margin-top: 0.75em; }
+.tiptap h1 { font-size: 1.7rem; font-weight: 700; }
+.tiptap h2 { font-size: 1.35rem; font-weight: 700; }
+.tiptap h3 { font-size: 1.15rem; font-weight: 600; }
+.tiptap p { margin: 0; }
+.tiptap ul { list-style: disc; padding-left: 1.4em; }
+.tiptap ol { list-style: decimal; padding-left: 1.4em; }
+.tiptap blockquote { border-left: 3px solid #c7d2fe; padding-left: 1em; color: #52525b; }
+.tiptap pre { background: #18181b; color: #f4f4f5; border-radius: 8px; padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; overflow-x: auto; }
+.tiptap code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.tiptap :not(pre) > code { background: #f4f4f5; border-radius: 4px; padding: 0.1em 0.3em; font-size: 0.9em; }
+.tiptap img { max-width: 100%; border-radius: 8px; }
+.tiptap a { color: #4f46e5; text-decoration: underline; }
+.tiptap table { border-collapse: collapse; width: 100%; }
+.tiptap th, .tiptap td { border: 1px solid #e4e4e7; padding: 6px 10px; }
+.tiptap .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tiptap .col { border: 1px dashed #e4e4e7; border-radius: 8px; padding: 8px; }
+.tiptap .callout { display: flex; gap: 8px; border: 1px solid #e4e4e7; border-left: 3px solid #6366f1; border-radius: 8px; padding: 10px 12px; background: #eef2ff; }
+.tiptap .callout[data-variant="warn"] { border-left-color: #d97706; background: #fffbeb; }
+.tiptap .callout[data-variant="danger"] { border-left-color: #dc2626; background: #fef2f2; }
+.tiptap .callout[data-variant="success"] { border-left-color: #16a34a; background: #f0fdf4; }
+.tiptap .quote-card { border: 1px solid #e4e4e7; border-radius: 10px; padding: 14px 18px; background: #fafafa; }
+.tiptap .figure figcaption { color: #71717a; font-size: 0.85em; text-align: center; margin-top: 6px; }
+.tiptap p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: #a1a1aa; float: left; height: 0; pointer-events: none; }

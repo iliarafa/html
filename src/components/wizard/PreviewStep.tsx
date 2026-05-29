@@ -3,13 +3,21 @@
 import type { WizardState } from "./state";
 import { StepLabel, StepTitle } from "./ui";
 
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  if (n < 1_000_000) return `${(n / 1024).toFixed(0)} KB`;
+  return `${(n / 1_000_000).toFixed(1)} MB`;
+}
+
 export default function PreviewStep({
   state,
   hasContent,
+  fileBytes,
   onDownload,
 }: {
   state: WizardState;
   hasContent: boolean;
+  fileBytes: number;
   onDownload: () => void;
 }) {
   const extras = [
@@ -25,11 +33,10 @@ export default function PreviewStep({
 
       <dl className="mb-6 space-y-2 text-sm">
         <Row label="Title" value={state.title || "Untitled"} />
-        <Row
-          label="Theme"
-          value={`${state.mode === "dark" ? "Dark" : "Light"} · ${state.accent}`}
-        />
+        <Row label="Template" value={state.template} />
+        <Row label="Theme" value={`${state.theme.mode} · ${state.theme.scheme} · ${state.theme.font}`} />
         <Row label="Extras" value={extras.length ? extras.join(", ") : "none"} />
+        <Row label="File size" value={formatBytes(fileBytes)} />
       </dl>
 
       <button
@@ -41,9 +48,7 @@ export default function PreviewStep({
         ⤓ Download .html
       </button>
       {!hasContent && (
-        <p className="mt-2 text-center text-xs text-zinc-400">
-          Add some content in Step 1 first.
-        </p>
+        <p className="mt-2 text-center text-xs text-zinc-400">Add some content first.</p>
       )}
       <p className="mt-3 text-center text-xs text-zinc-400">
         One self-contained file. Opens offline in any browser.

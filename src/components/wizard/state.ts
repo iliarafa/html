@@ -1,20 +1,17 @@
-// Wizard state shape + helpers shared across step components.
+// Wizard state shape + helpers shared across step components (v2). Body content now
+// lives in the TipTap editor (not in state); state holds metadata + design choices.
 
-import type { AccentKey, InputType, ReadingExtras, ThemeMode } from "@/lib/types";
+import { DEFAULT_THEME, type ReadingExtras, type TemplateKey, type ThemeConfig } from "@/lib/types";
 
 export type SourceMode = "paste" | "upload" | "link";
 
 export interface WizardState {
-  sourceMode: SourceMode;
-  /** How rawInput should be parsed: markdown (paste/.md), text (.txt), html (scraped). */
-  inputType: InputType;
-  rawInput: string;
   title: string;
   subtitle: string;
   author: string;
   date: string;
-  mode: ThemeMode;
-  accent: AccentKey;
+  template: TemplateKey;
+  theme: ThemeConfig;
   extras: ReadingExtras;
 }
 
@@ -29,17 +26,14 @@ export function formatToday(): string {
 
 export function initialState(): WizardState {
   return {
-    sourceMode: "paste",
-    inputType: "markdown",
-    rawInput: "",
     title: "",
     subtitle: "",
     author: "",
     date: formatToday(),
-    mode: "light",
-    accent: "indigo",
+    template: "article",
+    theme: { ...DEFAULT_THEME },
     extras: { themeToggle: true, readingTime: true, printStyles: true },
   };
 }
 
-export const STEPS = ["Input", "Details", "Theme", "Extras", "Preview"] as const;
+export const STEPS = ["Input", "Edit", "Design", "Details", "Download"] as const;

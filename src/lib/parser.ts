@@ -1,33 +1,14 @@
-// Parser: turns raw input (markdown / plain text / scraped HTML) into safe,
-// rendered HTML with code blocks highlighted at generation time.
+// Parser / importer: turns raw input (markdown / plain text / scraped HTML) into
+// safe HTML used to *seed the editor*. Highlighting is NOT applied here — it happens
+// at serialize time (see editor/serialize.ts) so it survives editing. Sanitization is
+// shared by the seed path and the final serialize path.
 
 import { Marked } from "marked";
-import hljs from "highlight.js";
 import createDOMPurify from "dompurify";
 import type { InputType } from "./types";
 
-// A Marked instance with a custom code renderer that pre-applies highlight.js,
-// so the output file ships with highlighted markup and needs no runtime JS/CSS
-// beyond the inlined theme.
-const marked = new Marked({
-  gfm: true,
-  breaks: false,
-});
+const marked = new Marked({ gfm: true, breaks: false });
 
-marked.use({
-  renderer: {
-    code({ text, lang }: { text: string; lang?: string }): string {
-      const language = lang && hljs.getLanguage(lang) ? lang : undefined;
-      const highlighted = language
-        ? hljs.highlight(text, { language }).value
-        : hljs.highlightAuto(text).value;
-      const cls = language ? ` language-${language}` : "";
-      return `<pre><code class="hljs${cls}">${highlighted}</code></pre>`;
-    },
-  },
-});
-
-/** Escape HTML-special characters in a plain-text string. */
 function escapeHtml(input: string): string {
   return input
     .replace(/&/g, "&amp;")
@@ -38,40 +19,67 @@ function escapeHtml(input: string): string {
 
 /** Plain text -> paragraphs (blank line = new <p>, single newline = <br>). */
 function renderPlainText(input: string): string {
-  const blocks = input.replace(/\r\n/g, "\n").split(/\n{2,}/);
-  return blocks
+  return input
+    .replace(/\r\n/g, "\n")
+    .split(/\n{2,}/)
     .map((block) => block.trim())
     .filter(Boolean)
     .map((block) => `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`)
     .join("\n");
 }
 
+// Tags that would break the offline / self-contained guarantee or are XSS vectors.
+const FORBID_TAGS = [
+  "script",
+  "style",
+  "iframe",
+  "object",
+  "embed",
+  "video",
+  "audio",
+  "svg",
+  "math",
+  "link",
+  "source",
+  "picture",
+  "base",
+];
+
 /**
- * DOMPurify needs a DOM. In the browser and in jsdom (tests) `window` exists;
- * we create the purifier lazily so this module is import-safe on the server.
+ * DOMPurify needs a DOM. In the browser and in jsdom (tests) `window` exists; we
+ * create the purifier lazily and register a hook that constrains <img src> to
+ * `data:` URIs only — this is what keeps the output fully self-contained while still
+ * allowing inlined (base64) images.
  */
 let purifier: ReturnType<typeof createDOMPurify> | null = null;
 function getPurifier() {
   if (!purifier) {
     purifier = createDOMPurify(window as unknown as Window & typeof globalThis);
+    purifier.addHook("afterSanitizeAttributes", (node) => {
+      if (node.tagName === "IMG") {
+        const src = node.getAttribute("src") ?? "";
+        if (!src.startsWith("data:")) node.removeAttribute("src");
+      }
+    });
   }
   return purifier;
 }
 
-/** Sanitize untrusted HTML, keeping class attributes (needed for hljs styling). */
+/** Sanitize untrusted HTML for both seeding and final output. */
 export function sanitize(html: string): string {
   return getPurifier().sanitize(html, {
-    ADD_ATTR: ["class"],
-    // Images are stripped from scraped articles; forbid them and other media
-    // here too so the output stays self-contained / offline.
-    FORBID_TAGS: ["img", "picture", "source", "video", "audio", "iframe"],
+    FORBID_TAGS,
+    // Allow the structural/interactive tags our blocks rely on, plus data-* / aria.
+    ADD_TAGS: ["details", "summary", "section", "aside", "figure", "figcaption", "button"],
+    ADD_ATTR: ["role", "hidden", "open", "data-variant", "data-tabs"],
+    ALLOW_DATA_ATTR: true,
   });
 }
 
 /**
- * Render raw input of the given type into safe, sanitized HTML ready for the
- * Builder. Markdown is parsed; plain text is escaped/paragraphed; scraped HTML
- * is passed through sanitization only.
+ * Render raw input of the given type into safe HTML ready to seed the editor.
+ * Markdown is parsed (code blocks left un-highlighted); plain text is escaped/
+ * paragraphed; scraped HTML is passed through sanitization.
  */
 export function render(input: string, type: InputType): string {
   let html: string;

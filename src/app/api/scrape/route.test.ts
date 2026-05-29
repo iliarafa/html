@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isBlockedHost } from "./route";
+import { isBlockedHost, imageMimeAllowed } from "./route";
 
 describe("isBlockedHost (SSRF guard)", () => {
   it("blocks loopback and localhost", () => {
@@ -21,5 +21,18 @@ describe("isBlockedHost (SSRF guard)", () => {
     expect(isBlockedHost("en.wikipedia.org")).toBe(false);
     expect(isBlockedHost("8.8.8.8")).toBe(false);
     expect(isBlockedHost("172.15.0.1")).toBe(false); // just outside private range
+  });
+});
+
+describe("imageMimeAllowed", () => {
+  it("allows raster image types", () => {
+    expect(imageMimeAllowed("image/png")).toBe(true);
+    expect(imageMimeAllowed("image/jpeg")).toBe(true);
+    expect(imageMimeAllowed("image/webp")).toBe(true);
+  });
+  it("rejects svg (XSS) and non-images", () => {
+    expect(imageMimeAllowed("image/svg+xml")).toBe(false);
+    expect(imageMimeAllowed("text/html")).toBe(false);
+    expect(imageMimeAllowed("application/json")).toBe(false);
   });
 });

@@ -43,7 +43,7 @@ export default function PreviewStep({
         type="button"
         onClick={onDownload}
         disabled={!hasContent}
-        className="w-full rounded-lg bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-40"
+        className="w-full rounded-lg bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40"
       >
         ⤓ Download .html
       </button>

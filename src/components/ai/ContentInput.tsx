@@ -62,12 +62,12 @@ export default function ContentInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Paste the notes / content you want designed…"
-          className="h-40 w-full resize-y rounded-lg border border-zinc-300 bg-white p-3 text-sm text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+          className="h-40 w-full resize-y rounded-lg border border-zinc-300 bg-white p-3 text-sm text-zinc-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
         />
       )}
 
       {mode === "upload" && (
-        <label className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-white text-center transition hover:border-indigo-400 hover:bg-indigo-50/30">
+        <label className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-white text-center transition hover:border-emerald-400 hover:bg-emerald-50/30">
           <input
             type="file"
             accept=".md,.markdown,.txt,text/plain,text/markdown"
@@ -100,7 +100,7 @@ export default function ContentInput({
               type="button"
               onClick={scrape}
               disabled={!url || loading}
-              className="shrink-0 rounded-lg bg-indigo-500 px-4 text-sm font-medium text-white transition hover:bg-indigo-600 disabled:opacity-40"
+              className="shrink-0 rounded-lg bg-emerald-500 px-4 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-40"
             >
               {loading ? "…" : "Fetch"}
             </button>

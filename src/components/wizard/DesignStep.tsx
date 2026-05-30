@@ -30,7 +30,7 @@ export default function DesignStep({
             onClick={() => update({ template: t.key as TemplateKey })}
             className={`rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition ${
               state.template === t.key
-                ? "border-indigo-400 bg-indigo-50 text-indigo-700"
+                ? "border-emerald-400 bg-emerald-50 text-emerald-700"
                 : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
             }`}
           >
@@ -80,7 +80,7 @@ export default function DesignStep({
             style={{ fontFamily: f.heading }}
             className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
               theme.font === f.key
-                ? "border-indigo-400 bg-indigo-50 text-indigo-700"
+                ? "border-emerald-400 bg-emerald-50 text-emerald-700"
                 : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
             }`}
           >

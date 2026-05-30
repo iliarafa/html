@@ -46,7 +46,7 @@ function Tab({
       onClick={onClick}
       title={title}
       className={`rounded-lg px-4 py-2 text-sm transition ${
-        active ? "bg-indigo-500 text-white" : "text-zinc-600 hover:bg-zinc-100"
+        active ? "bg-emerald-500 text-white" : "text-zinc-600 hover:bg-zinc-100"
       }`}
     >
       {children}

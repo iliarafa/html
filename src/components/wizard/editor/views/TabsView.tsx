@@ -21,17 +21,17 @@ export default function TabsView({ editor, getPos, node }: NodeViewProps) {
   return (
     <NodeViewWrapper
       as="div"
-      className="my-3 rounded-lg border border-dashed border-indigo-200 bg-indigo-50/30 p-2"
+      className="my-3 rounded-lg border border-dashed border-emerald-200 bg-emerald-50/30 p-2"
     >
       <div
         contentEditable={false}
         className="mb-2 flex items-center gap-2 px-1"
       >
-        <span className="text-[10px] uppercase tracking-wide text-indigo-400">tabs</span>
+        <span className="text-[10px] uppercase tracking-wide text-emerald-400">tabs</span>
         <button
           type="button"
           onClick={addPanel}
-          className="ml-auto rounded bg-indigo-500 px-2 py-0.5 text-xs font-medium text-white hover:bg-indigo-600"
+          className="ml-auto rounded bg-emerald-500 px-2 py-0.5 text-xs font-medium text-white hover:bg-emerald-600"
         >
           + Tab
         </button>

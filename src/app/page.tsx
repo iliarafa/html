@@ -5,7 +5,7 @@ export default function Home() {
     <div className="flex flex-1 flex-col">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-4">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500 text-sm font-bold text-white">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-sm font-bold text-white">
             ◐
           </span>
           <div>

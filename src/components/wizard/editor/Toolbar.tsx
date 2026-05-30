@@ -23,7 +23,7 @@ function Btn({
       title={title}
       className={`h-8 min-w-8 rounded px-2 text-sm font-medium transition ${
         active
-          ? "bg-indigo-100 text-indigo-700"
+          ? "bg-emerald-100 text-emerald-700"
           : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >

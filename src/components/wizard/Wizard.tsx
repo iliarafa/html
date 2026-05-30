@@ -86,7 +86,7 @@ export default function Wizard() {
             >
               <span
                 className={`h-1 rounded-full transition ${
-                  i <= step ? "bg-indigo-500" : "bg-zinc-200 group-hover:bg-zinc-300"
+                  i <= step ? "bg-emerald-500" : "bg-zinc-200 group-hover:bg-zinc-300"
                 }`}
               />
             </button>

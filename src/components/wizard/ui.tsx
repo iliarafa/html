@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 export function StepLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-indigo-500">
+    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-emerald-500">
       {children}
     </p>
   );
@@ -36,7 +36,7 @@ export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+      className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
     />
   );
 }
@@ -64,7 +64,7 @@ export function Toggle({
       </span>
       <span
         className={`mt-0.5 flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition ${
-          checked ? "bg-indigo-500" : "bg-zinc-300"
+          checked ? "bg-emerald-500" : "bg-zinc-300"
         }`}
       >
         <span

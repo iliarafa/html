@@ -98,13 +98,13 @@ export default function InputStep({
             value={pasteText}
             onChange={(e) => setPasteText(e.target.value)}
             placeholder={pasteType === "text" ? "Paste your notes…" : "# Heading\n\nWrite **Markdown** here…"}
-            className="h-56 w-full resize-y rounded-lg border border-zinc-300 bg-white p-3 font-mono text-sm text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="h-56 w-full resize-y rounded-lg border border-zinc-300 bg-white p-3 font-mono text-sm text-zinc-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
           />
           <button
             type="button"
             onClick={loadPaste}
             disabled={!pasteText.trim()}
-            className="mt-3 w-full rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-600 disabled:opacity-40"
+            className="mt-3 w-full rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-40"
           >
             Load into editor →
           </button>
@@ -115,7 +115,7 @@ export default function InputStep({
       )}
 
       {mode === "upload" && (
-        <label className="flex h-56 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-white text-center transition hover:border-indigo-400 hover:bg-indigo-50/30">
+        <label className="flex h-56 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-white text-center transition hover:border-emerald-400 hover:bg-emerald-50/30">
           <input
             type="file"
             accept=".md,.markdown,.txt,text/plain,text/markdown"
@@ -148,7 +148,7 @@ export default function InputStep({
                 type="button"
                 onClick={scrape}
                 disabled={!url || loading}
-                className="shrink-0 rounded-lg bg-indigo-500 px-4 text-sm font-medium text-white transition hover:bg-indigo-600 disabled:opacity-40"
+                className="shrink-0 rounded-lg bg-emerald-500 px-4 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-40"
               >
                 {loading ? "Fetching…" : "Fetch"}
               </button>

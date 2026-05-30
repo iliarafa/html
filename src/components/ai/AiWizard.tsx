@@ -86,7 +86,7 @@ export default function AiWizard() {
             value={brief}
             onChange={(e) => setBrief(e.target.value)}
             placeholder="e.g. warm editorial, big hero, serif headings"
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
           />
         </div>
 
@@ -94,7 +94,7 @@ export default function AiWizard() {
           type="button"
           onClick={generate}
           disabled={!hasContent || busy}
-          className="rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-40"
+          className="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-40"
         >
           {busy ? "Designing…" : html ? "Regenerate" : "✨ Generate design"}
         </button>
@@ -122,7 +122,7 @@ export default function AiWizard() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !busy) applyRefine();
                 }}
-                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
               />
               <button
                 type="button"
@@ -144,7 +144,7 @@ export default function AiWizard() {
               type="button"
               onClick={() => downloadHtml(html, brief || "ai-page")}
               disabled={busy}
-              className="mt-4 w-full rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100 disabled:opacity-40"
+              className="mt-4 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100 disabled:opacity-40"
             >
               ⤓ Download .html
             </button>

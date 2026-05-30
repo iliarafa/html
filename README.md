@@ -5,7 +5,15 @@ send to anyone. They open it in any browser — works fully offline, no server, 
 dependencies. Edit the content in a WYSIWYG editor, add interactive blocks, pick a
 layout and theme, then download.
 
-## How it works
+Two modes, chosen up front:
+
+- **Quick** — offline, self-contained file (templates + WYSIWYG editor). Described below.
+- **AI design** — an LLM generates a bespoke **HTML + CSS** page from your content + a
+  style brief, refined conversationally. These pages use external fonts/images, so they
+  need internet to render (they trade the offline guarantee for visual quality). No
+  JavaScript is ever emitted. Requires a Vercel AI Gateway key (see below).
+
+## How it works (Quick mode)
 
 A five-step wizard:
 
@@ -52,6 +60,26 @@ npm run dev      # http://localhost:3000
 npm test         # Vitest unit tests
 npm run build    # production build
 ```
+
+### AI design mode setup
+
+Copy `.env.example` to `.env.local` and set **one** key:
+
+- `AI_GATEWAY_API_KEY` — a [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) key
+  (`vck_…`, preferred), or
+- `ANTHROPIC_API_KEY` — a direct Anthropic key (`sk-ant-…`).
+
+Optional model overrides: `AI_MODEL` (gateway, default `anthropic/claude-sonnet-4.6`)
+or `ANTHROPIC_MODEL` (direct, default `claude-sonnet-4-6`). Add the same on Vercel.
+Until a key is present, AI design shows a friendly "add a key" prompt; Quick mode works
+without it.
+
+| AI module | Path | Responsibility |
+| --- | --- | --- |
+| Generate route | `src/app/api/generate/route.ts` | Stream generate/refine via AI Gateway `provider/model` |
+| Prompt | `src/lib/ai/prompt.ts` | System + user prompts; fence stripping |
+| AI sanitizer | `src/lib/ai/sanitizeAi.ts` | Relaxed profile: strip JS, allow web fonts/images |
+| AI UI | `src/components/ai/*`, `src/components/ModeRouter.tsx` | Mode switch + AI wizard |
 
 ## Out of scope
 

@@ -11,11 +11,16 @@ export default function LivePreview({
   hasContent,
   title,
   fileBytes,
+  sandbox = "allow-scripts",
+  emptyHint = "Your shareable page will appear here as you add content and tweak the look.",
 }: {
   doc: string;
   hasContent: boolean;
   title: string;
   fileBytes: number;
+  /** iframe sandbox value. AI pages pass "" (no scripts). */
+  sandbox?: string;
+  emptyHint?: string;
 }) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
@@ -35,14 +40,12 @@ export default function LivePreview({
           title="Live preview"
           srcDoc={doc}
           className="min-h-[520px] flex-1 bg-white"
-          sandbox="allow-scripts"
+          sandbox={sandbox}
         />
       ) : (
         <div className="flex min-h-[520px] flex-1 flex-col items-center justify-center text-center text-zinc-400">
           <span className="text-4xl">◐</span>
-          <p className="mt-3 max-w-xs text-sm">
-            Your shareable page will appear here as you add content and tweak the look.
-          </p>
+          <p className="mt-3 max-w-xs text-sm">{emptyHint}</p>
         </div>
       )}
     </div>

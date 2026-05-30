@@ -46,3 +46,6 @@ next-env.d.ts
 # test/preview artifacts
 .playwright-mcp/
 *.png
+
+# keep the env template tracked
+!.env.example

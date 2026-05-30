@@ -1,4 +1,4 @@
-import Wizard from "@/components/wizard/Wizard";
+import ModeRouter from "@/components/ModeRouter";
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
         </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-6">
-        <Wizard />
+        <ModeRouter />
       </main>
     </div>
   );

@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.81",
     "@mozilla/readability": "^0.6.0",
     "@tiptap/extension-image": "^3.23.6",
     "@tiptap/extension-link": "^3.23.6",
@@ -21,6 +22,7 @@
     "@tiptap/pm": "^3.23.6",
     "@tiptap/react": "^3.23.6",
     "@tiptap/starter-kit": "^3.23.6",
+    "ai": "^6.0.193",
     "dompurify": "^3.4.7",
     "highlight.js": "^11.11.1",
     "linkedom": "^0.18.12",

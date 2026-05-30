@@ -33,6 +33,54 @@ describe("sanitizeAiHtml", () => {
   });
 });
 
+describe("sanitizeAiHtml cross-browser hardening", () => {
+  it("adds a charset and viewport meta when missing", () => {
+    const out = sanitizeAiHtml("<html><head></head><body><p>hi</p></body></html>");
+    expect(out).toMatch(/<meta charset="utf-8">/i);
+    expect(out).toContain('name="viewport"');
+  });
+
+  it("does not duplicate an existing charset", () => {
+    const out = sanitizeAiHtml(
+      '<html><head><meta charset="UTF-8"></head><body>x</body></html>',
+    );
+    expect(out.match(/<meta charset/gi)?.length).toBe(1);
+  });
+
+  it("adds the -webkit- prefix for gradient text in a <style> block", () => {
+    const out = sanitizeAiHtml(
+      "<html><head><style>h1{background-clip:text;color:transparent}</style></head><body>x</body></html>",
+    );
+    expect(out).toContain("-webkit-background-clip: text");
+    expect(out).toContain("background-clip: text");
+  });
+
+  it("does not double-prefix an already-prefixed declaration", () => {
+    const out = sanitizeAiHtml(
+      "<html><head><style>h1{-webkit-background-clip:text}</style></head><body>x</body></html>",
+    );
+    expect(out.match(/-webkit-background-clip/gi)?.length).toBe(1);
+  });
+
+  it("adds the -webkit- prefix for backdrop-filter", () => {
+    const out = sanitizeAiHtml(
+      "<html><head><style>.card{backdrop-filter:blur(8px)}</style></head><body>x</body></html>",
+    );
+    expect(out).toContain("-webkit-backdrop-filter: blur(8px)");
+    expect(out).toContain("backdrop-filter: blur(8px)");
+  });
+
+  it("rewrites protocol-relative resource URLs to https so they survive file://", () => {
+    const out = sanitizeAiHtml(
+      '<html><head><link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter"></head><body><img src="//images.unsplash.com/p.jpg"></body></html>',
+    );
+    expect(out).toContain("https://fonts.googleapis.com");
+    expect(out).toContain("https://images.unsplash.com");
+    expect(out).not.toContain('href="//');
+    expect(out).not.toContain('src="//');
+  });
+});
+
 describe("prompt helpers", () => {
   it("strips markdown code fences", () => {
     expect(stripCodeFences("```html\n<p>hi</p>\n```")).toBe("<p>hi</p>");
